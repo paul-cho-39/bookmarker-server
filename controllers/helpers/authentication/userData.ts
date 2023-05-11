@@ -41,4 +41,4 @@ const transportDataToNeo4j = (user: UserRecord) => {
 };
 
 export default UserData;
-export { UserRecord, TransportData, transportDataToNeo4j };
+export { UserRecord, transportDataToNeo4j };

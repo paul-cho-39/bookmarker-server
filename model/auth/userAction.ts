@@ -1,5 +1,5 @@
 import { read, write } from '../../config/action';
-import { TransportData } from '../../controllers/user/userData';
+import { TransportData } from '../../controllers/types/authentication';
 
 // ORIGINAL VERSION BEFORE ADDING NUMBER OF ACCOUNTS
 const createUser = async (data: TransportData, name?: string) => {

@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { TransportData } from '../controllers/user/userData';
+import { TransportData } from '../controllers/helpers/authentication/userData';
 import { BookData, Items } from '../controllers/types/books';
 
 declare global {

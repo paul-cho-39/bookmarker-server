@@ -1,5 +1,4 @@
-import express, { Response, Request, NextFunction } from 'express';
-import { Record as NeoRecord } from 'neo4j-driver';
+import express from 'express';
 // bundle this together
 import getBookData from '../../../middleware/library/getBookData';
 

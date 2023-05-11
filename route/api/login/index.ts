@@ -1,17 +1,8 @@
-import express, { ErrorRequestHandler, Request, Response, NextFunction } from 'express';
+import express from 'express';
 
-import deleteAccount from './deleteAccount';
-import provider from './provider';
-import signin from './signin';
-import singout from './signout';
-import signup from './signup';
+const router = express.Router();
+import authentication from './authentication';
 
-const route = express.Router();
+router.use('/user', authentication);
 
-route.use('/user', deleteAccount);
-route.use('/user', provider);
-route.use('/user', signin);
-route.use('/user', singout);
-route.use('/user', signup);
-
-export default route;
+export default router;

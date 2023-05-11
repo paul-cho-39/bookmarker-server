@@ -1,5 +1,5 @@
 import getAuth from 'firebase-admin';
-import UserData from '../../controllers/user/userData';
+import UserData from '../../controllers/helpers/authentication/userData';
 import { Request, Response, NextFunction } from 'express';
 import { initiateUserConstraint } from '../../model/constraint-index/constraintModel';
 
