@@ -1,21 +1,33 @@
 import express, { Response, Request, NextFunction } from 'express';
-import BookWrite from '../../../model/library/write/bookWrite';
-import { createCustomSuccess } from '../../../constants/responseMessage';
+import { BookAction, BookRelationTypes } from '../../../controllers/types/books';
+import { bookHandler, editPrimary, selectPrimary } from '../../../controllers/library';
 
 const router = express.Router();
 
-// for this one it is changing the priamry book?
-router.post('/:uid/:id/edit-primary', async (req: Request, res: Response, next: NextFunction) => {
-   const { uid, id } = req.params;
-   console.log('Changing primary book...', id);
-   const editor = new BookWrite(uid, id);
-   try {
-      await editor.changePrimaryBook();
-      const response = createCustomSuccess('OK');
-      res.status(response.status).json({ message: response.message });
-   } catch (err) {
-      next(err);
-   }
+router.use(['/:uid/:id/reading', '/:uid/:id/finished/rereading'], selectPrimary);
+
+const routes = [
+   { url: '/:uid/:id/reading', props: 'CURRENTLY_READING', action: 'edit' },
+   { url: '/:uid/:id/want', props: 'WANT_TO_READ', action: 'edit' },
+   { url: '/:uid/:id/finished', props: 'FINISHED', action: 'edit' },
+   { url: '/:uid/:id/finished/rereading', props: 'FINISHED:CURRENTLY_READING', action: 'edit' },
+   { url: '/:uid/:id/finished/dates', props: null, action: 'finished' },
+   { url: '/:uid/:id/remove', props: null, action: 'remove' },
+];
+
+routes.forEach((route) => {
+   const { url, props, action } = route;
+   const isRemove = route.action === 'remove';
+   isRemove
+      ? router.delete(url, async (req: Request, res: Response, next: NextFunction) => {
+           await bookHandler(req, res, next, action as BookAction, props as BookRelationTypes);
+        })
+      : router.post(url, async (req: Request, res: Response, next: NextFunction) => {
+           await bookHandler(req, res, next, action as BookAction, props as BookRelationTypes);
+        });
 });
+
+// for this one it is changing the priamry book?
+router.post('/:uid/:id/edit-primary', editPrimary);
 
 export default router;
