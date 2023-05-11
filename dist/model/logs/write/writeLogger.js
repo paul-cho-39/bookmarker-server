@@ -20,7 +20,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editFavoriteSession = exports.removeBookLog = exports.manualLogInput = exports.endLogging = exports.startLogging = void 0;
+exports.editFavoriteSession = exports.removeAllLogsInBook = exports.removeBookLog = exports.manualLogInput = exports.endLogging = exports.startLogging = void 0;
 const action_1 = require("../../../config/action");
 // do not think there will be start logging and end logging
 // if the nfc can be scanned without the app and recieve the input for new Date();
@@ -97,6 +97,13 @@ const removeBookLog = (uid, id, loggerIndex) => __awaiter(void 0, void 0, void 0
     });
 });
 exports.removeBookLog = removeBookLog;
+const removeAllLogsInBook = (uid, id) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield (0, action_1.write)(`
+      MATCH (:User { uid: $uid })--(:Book {id: $id })-[logRel:LOGGED]-(log:Log)
+      DETACH DELETE log, logRel
+      `);
+});
+exports.removeAllLogsInBook = removeAllLogsInBook;
 const editFavoriteSession = (uid, id, isBookmarked, loggerIndex) => __awaiter(void 0, void 0, void 0, function* () {
     return yield (0, action_1.write)(`
       MATCH (:User { uid: $uid })--(:Book { id: $id })--(log:Log { index: $loggerIndex })

@@ -95,6 +95,15 @@ export const removeBookLog = async (uid: string, id: string, loggerIndex: number
    );
 };
 
+export const removeAllLogsInBook = async (uid: string, id: string) => {
+   return await write(
+      `
+      MATCH (:User { uid: $uid })--(:Book {id: $id })-[logRel:LOGGED]-(log:Log)
+      DETACH DELETE log, logRel
+      `
+   );
+};
+
 export const editFavoriteSession = async (
    uid: string,
    id: string,

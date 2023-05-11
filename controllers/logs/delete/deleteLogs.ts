@@ -27,4 +27,4 @@ async function deleteAllLogs(req: Request, res: Response, next: NextFunction) {
    }
 }
 
-export { deleteSingleLog };
+export { deleteSingleLog, deleteAllLogs };

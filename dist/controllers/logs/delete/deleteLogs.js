@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteSingleLog = void 0;
+exports.deleteAllLogs = exports.deleteSingleLog = void 0;
 const writeLogger_1 = require("../../../model/logs/write/writeLogger");
 const responseMessage_1 = require("../../../constants/responseMessage");
 function deleteSingleLog(req, res, next) {
@@ -37,3 +37,4 @@ function deleteAllLogs(req, res, next) {
         }
     });
 }
+exports.deleteAllLogs = deleteAllLogs;
