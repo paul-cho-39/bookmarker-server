@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "backend",
+    "slug": "backend",
+    "version": "1.0.0",
+    "description": "React-native-connect",
+    "sdkVersion": "47.0.0",
+    "platforms": []
+  }
+}
