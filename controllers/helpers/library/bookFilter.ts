@@ -1,4 +1,4 @@
-import { ImageLinks, ImageLinksPairs, Items } from '../types/books';
+import { ImageLinks, ImageLinksPairs, Items } from '../../types/books';
 
 interface Identifier {
    identifier: string;

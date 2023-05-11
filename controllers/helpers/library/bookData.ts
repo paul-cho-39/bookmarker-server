@@ -1,4 +1,4 @@
-import { Items } from '../types/books';
+import { Items } from '../../types/books';
 import Book from './bookFilter';
 
 export default function filterBookData(book: Items<Record<string, string>>) {

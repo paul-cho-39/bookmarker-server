@@ -4,9 +4,9 @@ import { Record as NeoRecord } from 'neo4j-driver';
 import { getAllBooks, getCurrentBooks } from '../../../model/library/read/bookRead';
 
 import getBookData from '../../../middleware/library/getBookData';
-import CurrentBookFilter from '../../../controllers/library/currentBook';
+import CurrentBookFilter from '../../../controllers/helpers/library/currentBook';
 
-import BookFilter from '../../../controllers/library/bookFilter';
+import BookFilter from '../../../controllers/helpers/library/bookFilter';
 import { convertArrayIntoObject } from '../../../controllers/helpers/covertArraytoObject';
 import { AllBookResult, CurrentBookResult } from '../../../controllers/types/read';
 import { createCustomSuccess } from '../../../constants/responseMessage';

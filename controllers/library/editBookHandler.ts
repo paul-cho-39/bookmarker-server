@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { BookAction, BookRelationTypes } from '../../controllers/types/books';
-import filterBookData from '../../controllers/library/bookData';
+import filterBookData from '../../controllers/helpers/library/bookData';
 import BookWrite from '../../model/library/write/bookWrite';
 import { createCustomSuccess } from '../../constants/responseMessage';
 

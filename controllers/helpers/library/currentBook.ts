@@ -1,5 +1,5 @@
 // subject to change the name for this
-import { CurrentBookResult } from '../types/read';
+import { CurrentBookResult } from '../../types/read';
 
 class CurrentBookFilter {
    data: CurrentBookResult[];

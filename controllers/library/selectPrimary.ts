@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import BookWrite from '../../model/library/write/bookWrite';
+import { createCustomSuccess } from '../../constants/responseMessage';
 
 async function selectPrimary(req: Request, _res: Response, next: NextFunction) {
    const { uid } = req.params;
@@ -14,4 +15,17 @@ async function selectPrimary(req: Request, _res: Response, next: NextFunction) {
    next();
 }
 
-export default selectPrimary;
+async function editPrimary(req: Request, res: Response, next: NextFunction) {
+   const { uid, id } = req.params;
+   console.log('Changing primary book...', id);
+   const editor = new BookWrite(uid, id);
+   try {
+      await editor.changePrimaryBook();
+      const response = createCustomSuccess('OK');
+      res.status(response.status).json({ message: response.message });
+   } catch (err) {
+      next(err);
+   }
+}
+
+export { selectPrimary, editPrimary };

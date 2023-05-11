@@ -1,5 +1,5 @@
 import BookWrite from '../../model/library/write/bookWrite';
-import filterBookData from '../library/bookData';
+import filterBookData from '../helpers/library/bookData';
 
 export type BookData = ReturnType<typeof filterBookData>;
 
