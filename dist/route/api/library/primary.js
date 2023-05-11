@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const selectPrimary_1 = require("../../../controllers/library/selectPrimary");
 const router = express_1.default.Router();
-const authentication_1 = __importDefault(require("./authentication"));
-router.use('/user', authentication_1.default);
+router.post('/:uid/:id/edit-primary', selectPrimary_1.editPrimary);
 exports.default = router;

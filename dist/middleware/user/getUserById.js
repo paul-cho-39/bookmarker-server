@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserRecordById = exports.inititateAuthentication = void 0;
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
-const userData_1 = __importDefault(require("../../controllers/user/userData"));
+const userData_1 = __importDefault(require("../../controllers/helpers/authentication/userData"));
 const constraintModel_1 = require("../../model/constraint-index/constraintModel");
 const inititateAuthentication = (_req, _res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const isUserInDatabase = yield firebase_admin_1.default.auth().listUsers(1);

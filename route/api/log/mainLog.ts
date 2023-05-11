@@ -20,7 +20,8 @@ router.post('/:uid/:id/start', startLog);
 // do not increase the logIndex(?) if the startTime has not passed 12 hours mark
 router.post('/:uid/:id/:logIndex/end', endLog);
 
-router.delete('/:uid/:id/:logIndex/delete', deleteSingleLog);
 router.post(`/:uid/:id/:logIndex/favorite-session`, checkBookmarkedValue, toggleFavoriteSession);
+
+router.delete('/:uid/:id/:logIndex/delete', deleteSingleLog);
 
 export default router;
