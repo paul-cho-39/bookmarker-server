@@ -10,8 +10,8 @@ import {
 
 const router = express.Router();
 
-router.get('/books/:uid', getUserBooks);
 router.get('/thumbnail/:id', getBookData, googleThumbnail);
+router.get('/books/:uid', getUserBooks);
 router.get('/current/:uid', getUsersCurrentlyReading);
 
 export default router;

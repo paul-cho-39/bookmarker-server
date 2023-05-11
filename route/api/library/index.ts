@@ -1,7 +1,7 @@
 import express, { Request } from 'express';
-import addBooks from './addBook';
+import primary from './primary';
 import getBooks from './getBooks';
-import editBook from './editBook';
+import library from './userLibrary';
 
 import authenticateUser from '../../../middleware/authenticateUser';
 import getBookData from '../../../middleware/library/getBookData';
@@ -14,7 +14,7 @@ router.use('/library/authenticate/:uid/:id', getBookData);
 
 // routes
 router.use('/library', getBooks);
-router.use('/library/edit', editBook);
-router.use('/library/authenticate', addBooks);
+router.use('/library/edit', primary);
+router.use('/library/authenticate', library);
 
 export default router;

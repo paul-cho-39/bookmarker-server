@@ -1,12 +1,10 @@
-import express, { Response, Request, NextFunction } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import { getCurrentLog } from '../../../model/logs/read/getLogger';
 import { createCustomSuccess } from '../../../constants/responseMessage';
 import { Record as NeoRecord } from 'neo4j-driver';
-import { LogType } from '../../../controllers/types/loggers';
+import { LogType } from '../../types/loggers';
 
-const router = express.Router();
-
-router.get('/:uid/:id/current-log', async (req, res, next) => {
+async function getUsersCurrentlyReadingLog(req: Request, res: Response, next: NextFunction) {
    const { uid, id } = req.params;
    try {
       const result = await getCurrentLog(uid, id);
@@ -22,6 +20,6 @@ router.get('/:uid/:id/current-log', async (req, res, next) => {
    } catch (err) {
       next(err);
    }
-});
+}
 
-export default router;
+export { getUsersCurrentlyReadingLog };

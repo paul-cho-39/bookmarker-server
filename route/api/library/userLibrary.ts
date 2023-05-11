@@ -1,6 +1,6 @@
 import express, { Response, Request, NextFunction } from 'express';
 import { BookAction, BookRelationTypes } from '../../../controllers/types/books';
-import { bookHandler, editPrimary, selectPrimary } from '../../../controllers/library';
+import { bookHandler, selectPrimary } from '../../../controllers/library';
 
 const router = express.Router();
 
@@ -26,8 +26,5 @@ routes.forEach((route) => {
            await bookHandler(req, res, next, action as BookAction, props as BookRelationTypes);
         });
 });
-
-// for this one it is changing the priamry book?
-router.post('/:uid/:id/edit-primary', editPrimary);
 
 export default router;
