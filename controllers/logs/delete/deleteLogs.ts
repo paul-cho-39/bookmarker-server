@@ -1,6 +1,6 @@
 import express, { Response, Request, NextFunction } from 'express';
 import { LoggerIndexParam } from '../../types/params';
-import { removeBookLog } from '../../../model/logs/write/initiate';
+import { removeBookLog } from '../../../model/logs/write/remove';
 import { createCustomSuccess } from '../../../constants/responseMessage';
 
 async function deleteSingleLog(

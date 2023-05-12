@@ -10,13 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAllLogs = exports.deleteSingleLog = void 0;
-const initiate_1 = require("../../../model/logs/write/initiate");
+const remove_1 = require("../../../model/logs/write/remove");
 const responseMessage_1 = require("../../../constants/responseMessage");
 function deleteSingleLog(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const { id, uid, logIndex } = req.params;
         try {
-            yield (0, initiate_1.removeBookLog)(uid, id, logIndex);
+            yield (0, remove_1.removeBookLog)(uid, id, logIndex);
             const response = (0, responseMessage_1.createCustomSuccess)('NO_CONTENT');
             res.status(response.status).json({ message: response.message });
         }
