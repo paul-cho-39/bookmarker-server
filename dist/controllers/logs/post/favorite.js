@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toggleFavoriteSession = void 0;
-const writeLogger_1 = require("../../../model/logs/write/writeLogger");
+const initiate_1 = require("../../../model/logs/write/initiate");
 const responseMessage_1 = require("../../../constants/responseMessage");
 function toggleFavoriteSession(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -18,7 +18,7 @@ function toggleFavoriteSession(req, res, next) {
         const { bookmarked } = req.body;
         const convertedLogIndex = typeof logIndex === 'string' ? parseInt(logIndex) : logIndex;
         try {
-            yield (0, writeLogger_1.editFavoriteSession)(uid, id, bookmarked, convertedLogIndex);
+            yield (0, initiate_1.editFavoriteSession)(uid, id, bookmarked, convertedLogIndex);
             const response = (0, responseMessage_1.createCustomSuccess)('OK');
             res.status(response.status).json({ message: response.message });
         }

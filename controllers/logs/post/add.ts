@@ -1,7 +1,7 @@
 import express, { Response, Request, NextFunction } from 'express';
 import { LoggerIndexParam, UserAndBookParam } from '../../types/params';
 import { LogType, LoggerData, ManualLoggerData } from '../../types/loggers';
-import { endLogging, manualLogInput, startLogging } from '../../../model/logs/write/writeLogger';
+import { endLogging, manualLogInput, startLogging } from '../../../model/logs/write/initiate';
 import { createCustomSuccess } from '../../../constants/responseMessage';
 
 async function addLogManually(

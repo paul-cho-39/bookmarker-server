@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.endLog = exports.startLog = exports.addLogManually = void 0;
-const writeLogger_1 = require("../../../model/logs/write/writeLogger");
+const initiate_1 = require("../../../model/logs/write/initiate");
 const responseMessage_1 = require("../../../constants/responseMessage");
 function addLogManually(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -18,7 +18,7 @@ function addLogManually(req, res, next) {
         const data = req.body;
         console.log('data has been recieved: ', data);
         try {
-            yield (0, writeLogger_1.manualLogInput)(uid, id, data);
+            yield (0, initiate_1.manualLogInput)(uid, id, data);
             const response = (0, responseMessage_1.createCustomSuccess)('CREATED');
             res.status(response.status).json({ message: response.message });
         }
@@ -33,7 +33,7 @@ function startLog(req, res, next) {
         const { id, uid } = req.params;
         const { startTime } = req.body;
         try {
-            const result = (yield (0, writeLogger_1.startLogging)(uid, id, startTime));
+            const result = (yield (0, initiate_1.startLogging)(uid, id, startTime));
             const properties = result[0].log.properties;
             const response = (0, responseMessage_1.createCustomSuccess)('OK');
             console.log('log finished', response);
@@ -50,7 +50,7 @@ function endLog(req, res, next) {
         const { id, uid, logIndex } = req.params;
         const data = req.body;
         try {
-            yield (0, writeLogger_1.endLogging)(uid, id, logIndex, data);
+            yield (0, initiate_1.endLogging)(uid, id, logIndex, data);
             const response = (0, responseMessage_1.createCustomSuccess)('CREATED');
             res.status(response.status).json({ message: response.message });
         }

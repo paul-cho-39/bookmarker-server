@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from 'express';
-import { editFavoriteSession } from '../../../model/logs/write/writeLogger';
+import { editFavoriteSession } from '../../../model/logs/write/initiate';
 import { createCustomSuccess } from '../../../constants/responseMessage';
 
 async function toggleFavoriteSession(req: Request, res: Response, next: NextFunction) {
