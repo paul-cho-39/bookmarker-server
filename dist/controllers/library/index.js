@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.googleThumbnail = exports.getUsersCurrentlyReading = exports.getUserBooks = exports.selectPrimary = exports.editPrimary = exports.bookHandler = void 0;
-const editBookHandler_1 = __importDefault(require("./editBookHandler"));
+const editBookHandler_1 = __importDefault(require("./post/editBookHandler"));
 exports.bookHandler = editBookHandler_1.default;
-const selectPrimary_1 = require("./selectPrimary");
+const selectPrimary_1 = require("./post/selectPrimary");
 Object.defineProperty(exports, "editPrimary", { enumerable: true, get: function () { return selectPrimary_1.editPrimary; } });
 Object.defineProperty(exports, "selectPrimary", { enumerable: true, get: function () { return selectPrimary_1.selectPrimary; } });
 // getters

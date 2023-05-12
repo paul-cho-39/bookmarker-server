@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { BookAction, BookRelationTypes } from '../../controllers/types/books';
-import filterBookData from '../../controllers/helpers/library/bookData';
-import BookWrite from '../../model/library/write/bookWrite';
-import { createCustomSuccess } from '../../constants/responseMessage';
+import { BookAction, BookRelationTypes } from '../../types/books';
+import filterBookData from '../../helpers/library/bookData';
+import BookWrite from '../../../model/library/write/bookWrite';
+import { createCustomSuccess } from '../../../constants/responseMessage';
 
 export default async function bookHandler(
    req: Request,

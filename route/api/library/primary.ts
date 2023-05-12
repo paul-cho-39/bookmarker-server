@@ -1,5 +1,5 @@
 import express from 'express';
-import { editPrimary } from '../../../controllers/library/selectPrimary';
+import { editPrimary } from '../../../controllers/library/post/selectPrimary';
 
 const router = express.Router();
 

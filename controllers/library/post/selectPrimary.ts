@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import BookWrite from '../../model/library/write/bookWrite';
-import { createCustomSuccess } from '../../constants/responseMessage';
+import BookWrite from '../../../model/library/write/bookWrite';
+import { createCustomSuccess } from '../../../constants/responseMessage';
 
 async function selectPrimary(req: Request, _res: Response, next: NextFunction) {
    const { uid } = req.params;

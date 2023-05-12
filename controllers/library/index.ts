@@ -1,5 +1,5 @@
-import bookHandler from './editBookHandler';
-import { editPrimary, selectPrimary } from './selectPrimary';
+import bookHandler from './post/editBookHandler';
+import { editPrimary, selectPrimary } from './post/selectPrimary';
 // getters
 import googleThumbnail from './get/thumbnail';
 import { getUserBooks, getUsersCurrentlyReading } from './get/userLibraries';
