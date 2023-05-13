@@ -26,6 +26,7 @@ interface ManualLoggerData extends LoggerData {
 
 // notes
 interface NoteProps {
+   id: string;
    title?: string;
    body: string;
    logIndex?: number;

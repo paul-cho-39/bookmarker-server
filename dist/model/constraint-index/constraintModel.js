@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loggerIndexConstraint = exports.initiateUserConstraint = exports.bookIdIndex = exports.userEmailConstraint = exports.userIdConstraint = void 0;
+exports.loggerIndexConstraint = exports.initiateUserConstraint = exports.noteIdIndex = exports.bookIdIndex = exports.userEmailConstraint = exports.userIdConstraint = void 0;
 const action_1 = require("../../config/action");
 const userIdConstraint = () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, action_1.write)(`
@@ -33,6 +33,13 @@ const bookIdIndex = () => __awaiter(void 0, void 0, void 0, function* () {
        `);
 });
 exports.bookIdIndex = bookIdIndex;
+const noteIdIndex = () => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, action_1.write)(`
+      CREATE INDEX note_id_index IF NOT EXISTS
+      FOR (n:Note) ON (n.id)
+      `);
+});
+exports.noteIdIndex = noteIdIndex;
 const initiateUserConstraint = () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, exports.userIdConstraint)()
         .then(() => __awaiter(void 0, void 0, void 0, function* () {

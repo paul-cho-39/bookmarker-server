@@ -1,6 +1,8 @@
 import { write } from '../../../config/action';
 import { LogBasicParams, NoteProps } from '../../../controllers/types/loggers';
 
+// :CONSIDER for logs, can include chapters/sections which can be used, but the downside is
+// misinformation
 export const createNote = (params: LogBasicParams, noteParams: NoteProps, isPublic: boolean) => {
    const { id, uid, logIndex } = params;
    let query = `
@@ -18,5 +20,17 @@ export const createNote = (params: LogBasicParams, noteParams: NoteProps, isPubl
    });
 };
 
-// a user writes the note
-// if already created for that very logIndex then
+export const editNote = (noteId: string, noteParams: Omit<NoteProps, 'noteId'>) => {
+   return write(
+      `
+        MATCH (note:Note { id: $noteId }) 
+        SET note += $noteParams
+        `,
+      {
+         noteId: noteId,
+         noteParams: noteParams,
+      }
+   );
+};
+
+// TODO: create a helper where the logIndex and uniqueId is assigned to noteId

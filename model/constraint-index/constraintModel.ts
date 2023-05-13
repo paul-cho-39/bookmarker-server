@@ -26,6 +26,15 @@ export const bookIdIndex = async () => {
    );
 };
 
+export const noteIdIndex = async () => {
+   await write(
+      `
+      CREATE INDEX note_id_index IF NOT EXISTS
+      FOR (n:Note) ON (n.id)
+      `
+   );
+};
+
 export const initiateUserConstraint = async () => {
    await userIdConstraint()
       .then(async () => {
