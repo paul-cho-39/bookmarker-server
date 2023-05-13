@@ -34,28 +34,29 @@ export type VolumeInfo = {
    industryIdentifiers?: IndustryIdentifiers[];
 };
 
-export type IndustryIdentifiers = {
+export interface IndustryIdentifiers {
    type: 'ISBN_10' | 'ISBN-13' | 'ISSN' | 'OTHER';
    identifier: string;
-};
+}
 
-export type ImageLinks = {
+export interface ImageLinks {
    extraLarge: string;
    large: string;
    medium: string;
    small: string;
    smallThumbnail: string;
    thumbnail: string;
-};
+}
 
 export type ImageLinksPairs = Pick<ImageLinks, 'thumbnail' | 'smallThumbnail'>;
 
-export type Library = {
+export interface Library {
    finished: string[] | undefined;
    unfinished: string[] | undefined;
    wantToRead: string[] | undefined;
    currentlyReading: string[] | undefined;
-}[];
+}
+[];
 
 export type BookRelationTypes =
    | 'CURRENTLY_READING'
@@ -64,3 +65,8 @@ export type BookRelationTypes =
    | 'FINISHED:REREADING';
 
 export type BookAction = 'edit' | 'finished' | 'remove';
+
+export interface BookSection {
+   parts?: number | string;
+   chapters?: number | string;
+}
