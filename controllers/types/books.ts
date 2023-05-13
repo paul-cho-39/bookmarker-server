@@ -70,3 +70,8 @@ export interface BookSection {
    parts?: number | string;
    chapters?: number | string;
 }
+
+export interface UserBookParam {
+   id: string;
+   uid: string;
+}

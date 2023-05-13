@@ -1,4 +1,9 @@
 import { Integer, Node } from 'neo4j-driver';
+import { UserBookParam } from './books';
+
+interface LogBasicParams extends UserBookParam {
+   logIndex?: number;
+}
 
 // logs
 interface LogProperties {
@@ -22,13 +27,14 @@ interface ManualLoggerData extends LoggerData {
 // notes
 interface NoteProps {
    title?: string;
-   createdAt: Date | string;
-   updatedAt: Date | string;
    body: string;
+   logIndex?: number;
+   createdAt: Date | string;
+   updatedAt?: Date | string;
    quote?: string;
    reference?: string | number; // page
 }
 
 export type LogType = { log: Node<Integer, LogProperties> };
 
-export type { LoggerData, ManualLoggerData };
+export type { LoggerData, ManualLoggerData, LogBasicParams, NoteProps };
