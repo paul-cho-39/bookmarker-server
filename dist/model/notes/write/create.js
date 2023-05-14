@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editNote = exports.createNote = void 0;
+exports.deleteNoteFromFavorite = exports.addNoteToFavorite = exports.editNote = exports.createNote = void 0;
 const action_1 = require("../../../config/action");
 // :CONSIDER for logs, can include chapters/sections which can be used, but the downside is
 // misinformation
@@ -31,4 +31,26 @@ const editNote = (noteId, noteParams) => {
     });
 };
 exports.editNote = editNote;
+// to do this requires "noteId" - meaning that it would require
+// adding a favorite note even though it is not their notes
+const addNoteToFavorite = (uid, noteId) => {
+    return (0, action_1.write)(`
+        MATCH (u:User { uid: $uid }), (n:Note { id: $noteId })
+        CREATE (u)-[:FAVORITED_NOTE]-(n)
+        `, {
+        uid: uid,
+        noteId: noteId,
+    });
+};
+exports.addNoteToFavorite = addNoteToFavorite;
+const deleteNoteFromFavorite = (uid, noteId) => {
+    return (0, action_1.write)(`
+        MATCH (u:User { uid: $uid })-[rel:FAVORITE_NOTE]-(n:Note { id: $noteId })
+        DELETE rel;
+        `, {
+        uid: uid,
+        noteId: noteId,
+    });
+};
+exports.deleteNoteFromFavorite = deleteNoteFromFavorite;
 // TODO: create a helper where the logIndex and uniqueId is assigned to noteId

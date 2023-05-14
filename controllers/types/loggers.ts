@@ -33,7 +33,7 @@ interface NoteProps {
    createdAt: Date | string;
    updatedAt?: Date | string;
    quote?: string;
-   reference?: string | number; // page
+   reference?: string | number; // page or url
 }
 
 export type LogType = { log: Node<Integer, LogProperties> };
