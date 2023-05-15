@@ -14,7 +14,6 @@ const responseMessage_1 = require("../constants/responseMessage");
 function authenticateUser(req, _res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const { uid, id } = req.params;
-        console.log('Checking if user has session...', uid);
         try {
             const user = yield (0, userAction_1.isUserInSession)(uid);
             const hasSession = user.records.map((record) => record.get('user')).toString();
