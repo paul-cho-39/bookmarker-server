@@ -1,13 +1,19 @@
 import { write } from '../../../config/action';
-import { LogBasicParams, NoteProps } from '../../../controllers/types/loggers';
+import { LogBasicParams, NoteProps, NoteRelParam } from '../../../controllers/types/loggers';
 
 // :CONSIDER for logs, can include chapters/sections which can be used, but the downside is
 // misinformation
-export const createNote = (params: LogBasicParams, noteParams: NoteProps, isPublic: boolean) => {
+export const createNote = (
+   params: LogBasicParams,
+   noteParams: NoteProps,
+   relParams: NoteRelParam<NoteProps>,
+   isPublic: boolean
+) => {
    const { id, uid, logIndex } = params;
    let query = `
         MATCH (user:User { uid: $uid })--(book:Book { id: $id })--(log:Log { index: $logIndex })
-        CREATE (user)-[:WROTE]->(note:Note $params })-[:ABOUT]->(log)
+        CREATE (user)-[WROTE { createdAt: $createdAt }]->(note:Note $params })-[:ABOUT]->(log)
+        rel = $relParams
         `;
    if (isPublic) {
       query += `CREATE (note)-[:SHARED]->(book)`;
@@ -16,6 +22,7 @@ export const createNote = (params: LogBasicParams, noteParams: NoteProps, isPubl
       uid: uid,
       id: id,
       logIndex: logIndex,
+      relParams: relParams.createdAt,
       params: noteParams,
    });
 };
@@ -23,7 +30,7 @@ export const createNote = (params: LogBasicParams, noteParams: NoteProps, isPubl
 export const editNote = (noteId: string, noteParams: Omit<NoteProps, 'noteId'>) => {
    return write(
       `
-        MATCH (note:Note { id: $noteId }) 
+        MATCH (note:Note { id: $noteId })
         SET note += $noteParams
         `,
       {
@@ -48,6 +55,7 @@ export const addNoteToFavorite = (uid: string, noteId: string) => {
    );
 };
 
+// TODO: save this in another file that is more fitting
 export const deleteNoteFromFavorite = (uid: string, noteId: string) => {
    return write(
       `

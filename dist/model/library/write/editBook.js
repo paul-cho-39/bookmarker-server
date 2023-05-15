@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editBookTime = void 0;
+exports.addSection = exports.editBookTime = void 0;
 const action_1 = require("../../../config/action");
 // when editing time, what else can be combined to edit the time altogether?
 const editBookTime = (uid, id, date) => __awaiter(void 0, void 0, void 0, function* () {
@@ -26,3 +26,11 @@ const editBookTime = (uid, id, date) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.editBookTime = editBookTime;
 // if there is no thumbnail then give the user a choice to upload the book image?
+// TODO: have to use S3 buckets, multzer, multzer-s3 and amazon-service for this
+const addSection = (uid, id, section) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, action_1.write)(`
+      MATCH (:User { uid: $uid })--(:Book { id: $id })
+      
+      `);
+});
+exports.addSection = addSection;

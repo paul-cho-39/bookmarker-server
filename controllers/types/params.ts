@@ -7,4 +7,8 @@ interface LoggerIndexParam extends UserAndBookParam {
    logIndex: number;
 }
 
-export type { UserAndBookParam, LoggerIndexParam };
+interface NoteIdParam extends UserAndBookParam {
+   noteId: string;
+}
+
+export type { UserAndBookParam, LoggerIndexParam, NoteIdParam };

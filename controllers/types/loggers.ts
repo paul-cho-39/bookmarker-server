@@ -30,12 +30,23 @@ interface NoteProps {
    title?: string;
    body: string;
    logIndex?: number;
-   createdAt: Date | string;
-   updatedAt?: Date | string;
-   quote?: string;
+   quote?: string[]; // multiple quotes in a single note
    reference?: string | number; // page or url
 }
 
-export type LogType = { log: Node<Integer, LogProperties> };
+interface NoteRelParamWithNoteProps {
+   createdAt: Date | string;
+   updatedAt: null;
+}
 
-export type { LoggerData, ManualLoggerData, LogBasicParams, NoteProps };
+interface NoteRelParamWithoutNoteProps {
+   createdAt: null;
+   updatedAt: Date | string;
+}
+
+type NoteRelParam<T> = T extends NoteProps
+   ? NoteRelParamWithNoteProps
+   : NoteRelParamWithoutNoteProps;
+
+export type LogType = { log: Node<Integer, LogProperties> };
+export type { LoggerData, ManualLoggerData, LogBasicParams, NoteProps, NoteRelParam };
