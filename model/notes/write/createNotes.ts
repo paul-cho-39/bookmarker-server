@@ -13,7 +13,7 @@ export const createNote = (
    let query = `
         MATCH (user:User { uid: $uid })--(book:Book { id: $id })--(log:Log { index: $logIndex })
         CREATE (user)-[WROTE { createdAt: $createdAt }]->(note:Note $params })-[:ABOUT]->(log)
-        rel = $relParams
+        note.id = apoc.create.uuid()
         `;
    if (isPublic) {
       query += `CREATE (note)-[:SHARED]->(book)`;
@@ -22,7 +22,7 @@ export const createNote = (
       uid: uid,
       id: id,
       logIndex: logIndex,
-      relParams: relParams.createdAt,
+      createdAt: relParams.createdAt,
       params: noteParams,
    });
 };

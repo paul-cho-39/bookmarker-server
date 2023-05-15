@@ -9,7 +9,7 @@ const createNote = (params, noteParams, relParams, isPublic) => {
     let query = `
         MATCH (user:User { uid: $uid })--(book:Book { id: $id })--(log:Log { index: $logIndex })
         CREATE (user)-[WROTE { createdAt: $createdAt }]->(note:Note $params })-[:ABOUT]->(log)
-        rel = $relParams
+        note.id = apoc.create.uuid()
         `;
     if (isPublic) {
         query += `CREATE (note)-[:SHARED]->(book)`;
@@ -18,7 +18,7 @@ const createNote = (params, noteParams, relParams, isPublic) => {
         uid: uid,
         id: id,
         logIndex: logIndex,
-        relParams: relParams.createdAt,
+        createdAt: relParams.createdAt,
         params: noteParams,
     });
 };
