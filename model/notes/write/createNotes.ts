@@ -9,7 +9,7 @@ export const createNote = (
    relParams: NoteRelParam<NoteProps>,
    isPublic: boolean
 ) => {
-   const { id, uid, logIndex } = params;
+   const { id, uid, index } = params;
    let query = `
         MATCH (user:User { uid: $uid })--(book:Book { id: $id })--(log:Log { index: $logIndex })
         CREATE (user)-[WROTE { createdAt: $createdAt }]->(note:Note $params })-[:ABOUT]->(log)
@@ -21,24 +21,8 @@ export const createNote = (
    return write(query, {
       uid: uid,
       id: id,
-      logIndex: logIndex,
+      logIndex: index,
       createdAt: relParams.createdAt,
       params: noteParams,
    });
 };
-
-// TODO: save this in another file that is more fitting
-export const deleteNoteFromFavorite = (uid: string, noteId: string) => {
-   return write(
-      `
-        MATCH (u:User { uid: $uid })-[rel:FAVORITE_NOTE]-(n:Note { id: $noteId })
-        DELETE rel;
-        `,
-      {
-         uid: uid,
-         noteId: noteId,
-      }
-   );
-};
-
-// TODO: create a helper where the logIndex and uniqueId is assigned to noteId

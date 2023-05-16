@@ -40,6 +40,7 @@ export const addPartialNoteToFavorite = (
    noteId: string,
    noteParams: Partial<NoteProps>
 ) => {
+   // the logic for parsing quotes should be in controllers/helpers
    const favoriteNoteParam = { ...noteParams, uid: uid, id: noteId };
    return write(
       `
@@ -53,6 +54,34 @@ export const addPartialNoteToFavorite = (
          uid: uid,
          id: noteId,
          favoriteNoteParam: favoriteNoteParam,
+      }
+   );
+};
+
+// TODO: save this in another file that is more fitting
+
+export const deleteNoteFromFavorite = (uid: string, noteId: string) => {
+   return write(
+      `
+         MATCH (u:User { uid: $uid })-[rel:FAVORITE_NOTE]-(n:Note { id: $noteId })
+         DELETE rel;
+         `,
+      {
+         uid: uid,
+         noteId: noteId,
+      }
+   );
+};
+
+export const deletePartialNoteFromFavorite = (uid: string, noteId: string) => {
+   return write(
+      `
+       MATCH (u:User { uid: $uid })-[rel1:FAVORITED]->(fn:FavoritedNote { userId: u.uid, noteId: $noteId })-[rel2:BASED_ON]->(n:Note)
+       DELETE rel1, rel2, fn
+       `,
+      {
+         uid: uid,
+         noteId: noteId,
       }
    );
 };

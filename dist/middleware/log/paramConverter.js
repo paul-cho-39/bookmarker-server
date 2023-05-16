@@ -13,6 +13,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.paramLogConverter = void 0;
 const paramLogConverter = (req, _res, next) => {
+    console.log('param log converter starting...');
     const _a = req.params, { logIndex } = _a, rest = __rest(_a, ["logIndex"]);
     const index = typeof logIndex === 'string' ? parseInt(logIndex) : logIndex;
     req.logParams = Object.assign(Object.assign({}, rest), { index });

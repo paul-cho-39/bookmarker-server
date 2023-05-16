@@ -15,7 +15,7 @@ interface NoteBodyProps {
    noteRel: NoteRelParam<NoteProps>;
 }
 
-export async function writeNotes(
+export async function writeNote(
    req: Request<LoggerIndexParam, {}, NoteBodyProps>,
    res: Response,
    next: NextFunction,
@@ -24,7 +24,7 @@ export async function writeNotes(
    // parse the data here(?)
    const { noteBody, noteRel } = req.body;
    try {
-      createNote(req.params, noteBody, noteRel, isPublic);
+      createNote(req.logParams, noteBody, noteRel, isPublic);
       const response = createCustomSuccess('CREATED');
       res.status(response.status).send(response.message);
    } catch (err) {

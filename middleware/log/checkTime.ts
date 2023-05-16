@@ -1,14 +1,25 @@
 import { Request, Response, NextFunction } from 'express';
 import { createCustomError } from '../../constants/responseMessage';
 
-// will return false EVERY TIME
-const checkTime = async (req: Request, res: Response, next: NextFunction) => {
-   const { startTime } = req.body as { startTime: string };
-   const convertedStartTime = new Date(startTime);
+interface TimeBodyParam {
+   time: {
+      currentTime: Date;
+      startTime: Date;
+   };
+   threshold: number;
+}
 
-   const currentDate = Date.now();
-   const threshold = 12 * 60 * 60 * 1000; // 12 hours
-   if (currentDate - convertedStartTime.getTime() <= threshold) {
+// this is not a promise
+const checkTime = (req: Request<{}, {}, TimeBodyParam>, _res: Response, next: NextFunction) => {
+   // the current time is passed
+   const { time, threshold } = req.body;
+   const { startTime, currentTime } = time;
+
+   // TODO: have to get the currentTime and see if it works for date here
+   // const threshold = 12 * 60 * 60 * 1000; // 12 hours
+
+   // if it passes this it wont record
+   if (currentTime.getTime() - startTime.getTime() >= threshold) {
       next(createCustomError('INVALID_INPUT'));
    }
    next();

@@ -14,9 +14,8 @@ const remove_1 = require("../../../model/logs/write/remove");
 const responseMessage_1 = require("../../../constants/responseMessage");
 function deleteSingleLog(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { id, uid, logIndex } = req.params;
         try {
-            yield (0, remove_1.removeBookLog)(uid, id, logIndex);
+            yield (0, remove_1.removeBookLog)(req.logParams);
             const response = (0, responseMessage_1.createCustomSuccess)('NO_CONTENT');
             res.status(response.status).json({ message: response.message });
         }

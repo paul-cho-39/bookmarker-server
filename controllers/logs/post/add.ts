@@ -1,5 +1,5 @@
-import express, { Response, Request, NextFunction } from 'express';
-import { LoggerIndexParam, UserAndBookParam } from '../../types/params';
+import { Response, Request, NextFunction } from 'express';
+import { UserAndBookParam } from '../../types/params';
 import { LogType, LoggerData, ManualLoggerData } from '../../types/loggers';
 import { endLogging, manualLogInput, startLogging } from '../../../model/logs/write/initiate';
 import { createCustomSuccess } from '../../../constants/responseMessage';
@@ -35,15 +35,10 @@ async function startLog(req: Request, res: Response, next: NextFunction) {
    }
 }
 
-async function endLog(
-   req: Request<LoggerIndexParam, {}, LoggerData>,
-   res: Response,
-   next: NextFunction
-) {
-   const { id, uid, logIndex } = req.params;
+async function endLog(req: Request<{}, {}, LoggerData>, res: Response, next: NextFunction) {
    const data: LoggerData = req.body;
    try {
-      await endLogging(uid, id, logIndex, data);
+      await endLogging(req.logParams, data);
       const response = createCustomSuccess('CREATED');
       res.status(response.status).json({ message: response.message });
    } catch (err) {

@@ -3,8 +3,9 @@ interface UserAndBookParam {
    id: string;
 }
 
+// not to be confused with the params which is the initial params
 interface LoggerIndexParam extends UserAndBookParam {
-   logIndex: number;
+   logIndex: string;
 }
 
 interface NoteIdParam extends UserAndBookParam {

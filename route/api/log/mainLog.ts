@@ -10,18 +10,20 @@ import {
 } from './../../../controllers/logs';
 
 import { checkBookmarkedValue } from '../../../middleware/log/favoriteSession';
+import { paramLogConverter } from '../../../middleware/log/paramConverter';
 const router = express.Router();
+
+router.use('/:uid/:id/:logIndex', paramLogConverter);
 
 router.get('/:uid/:id/current-log', getUsersCurrentlyReadingLog);
 router.post('/:uid/:id/manual-log', addLogManually);
 
 // or is there a way for cleaning up old logs?
 router.post('/:uid/:id/start', startLog);
+
 // do not increase the logIndex(?) if the startTime has not passed 12 hours mark
 router.post('/:uid/:id/:logIndex/end', endLog);
-
 router.post(`/:uid/:id/:logIndex/favorite-session`, checkBookmarkedValue, toggleFavoriteSession);
-
 router.delete('/:uid/:id/:logIndex/delete', deleteSingleLog);
 
 export default router;

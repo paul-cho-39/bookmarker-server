@@ -1,5 +1,5 @@
 import { write } from '../../../config/action';
-import { LoggerData, ManualLoggerData } from '../../../controllers/types/loggers';
+import { LogBasicParams, LoggerData, ManualLoggerData } from '../../../controllers/types/loggers';
 
 // do not think there will be start logging and end logging
 // if the nfc can be scanned without the app and recieve the input for new Date();
@@ -29,12 +29,8 @@ export const startLogging = async (uid: string, id: string, startDate: string) =
    );
 };
 
-export const endLogging = async (
-   uid: string,
-   id: string,
-   logIndex: number,
-   loggerData: LoggerData
-) => {
+export const endLogging = async (baseParams: LogBasicParams, loggerData: LoggerData) => {
+   const { uid, id, index } = baseParams;
    return await write(
       `
         MATCH (:User { uid: $uid })--(book:Book { id: $id })-[rel:LOGGED]-(log:Log { index: $logIndex })
@@ -48,7 +44,7 @@ export const endLogging = async (
       {
          uid: uid,
          id: id,
-         logIndex: logIndex,
+         logIndex: index,
          data: loggerData,
       }
    );
@@ -78,22 +74,18 @@ export const manualLogInput = async (uid: string, id: string, loggerData: Manual
    );
 };
 
-export const editFavoriteSession = async (
-   uid: string,
-   id: string,
-   isBookmarked: boolean,
-   loggerIndex: number | string
-) => {
+export const editFavoriteSession = async (baseParams: LogBasicParams, isBookmarked: boolean) => {
+   const { uid, id, index } = baseParams;
    return await write(
       `
-      MATCH (:User { uid: $uid })--(:Book { id: $id })--(log:Log { index: $loggerIndex })
+      MATCH (:User { uid: $uid })--(:Book { id: $id })--(log:Log { index: $logIndex })
       WITH log
       SET log.isBookmarked = $isBookmarked
       `,
       {
          uid: uid,
          id: id,
-         loggerIndex: loggerIndex,
+         logIndex: index,
          isBookmarked: isBookmarked,
       }
    );

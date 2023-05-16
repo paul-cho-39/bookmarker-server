@@ -11,7 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeAllLogsInBook = exports.removeBookLog = void 0;
 const action_1 = require("../../../config/action");
-const removeBookLog = (uid, id, loggerIndex) => __awaiter(void 0, void 0, void 0, function* () {
+const removeBookLog = (basicParams) => __awaiter(void 0, void 0, void 0, function* () {
+    const { uid, id, index } = basicParams;
     return yield (0, action_1.write)(`
        MATCH (:User { uid: $uid })--(book:Book {id: $id })-[logRel:LOGGED]-(log:Log { index: $loggerIndex})
        OPTIONAL MATCH (book)--(logs:Log) WHERE logs.index >= $loggerIndex 
@@ -21,7 +22,7 @@ const removeBookLog = (uid, id, loggerIndex) => __awaiter(void 0, void 0, void 0
        `, {
         uid: uid,
         id: id,
-        loggerIndex: loggerIndex,
+        loggerIndex: index,
     });
 });
 exports.removeBookLog = removeBookLog;
@@ -29,6 +30,9 @@ const removeAllLogsInBook = (uid, id) => __awaiter(void 0, void 0, void 0, funct
     return yield (0, action_1.write)(`
        MATCH (:User { uid: $uid })--(:Book {id: $id })-[logRel:LOGGED]-(log:Log)
        DETACH DELETE log, logRel
-       `);
+       `, {
+        uid: uid,
+        id: id,
+    });
 });
 exports.removeAllLogsInBook = removeAllLogsInBook;

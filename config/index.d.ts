@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { TransportData } from '../controllers/helpers/authentication/userData';
-import { BookData, Items } from '../controllers/types/books';
+import { BookData, Items, UserBookParam } from '../controllers/types/books';
 
 declare global {
    namespace Express {
@@ -10,6 +10,7 @@ declare global {
          isNewUser: boolean;
          googleData: Items<Record<string, string>>;
          filteredBookData: BookData;
+         logParams: UserBookParam & { index: number };
       }
    }
 }

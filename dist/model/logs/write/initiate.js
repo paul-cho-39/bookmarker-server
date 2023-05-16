@@ -45,7 +45,8 @@ const startLogging = (uid, id, startDate) => __awaiter(void 0, void 0, void 0, f
     });
 });
 exports.startLogging = startLogging;
-const endLogging = (uid, id, logIndex, loggerData) => __awaiter(void 0, void 0, void 0, function* () {
+const endLogging = (baseParams, loggerData) => __awaiter(void 0, void 0, void 0, function* () {
+    const { uid, id, index } = baseParams;
     return yield (0, action_1.write)(`
         MATCH (:User { uid: $uid })--(book:Book { id: $id })-[rel:LOGGED]-(log:Log { index: $logIndex })
         WITH book, rel, log
@@ -57,7 +58,7 @@ const endLogging = (uid, id, logIndex, loggerData) => __awaiter(void 0, void 0, 
         `, {
         uid: uid,
         id: id,
-        logIndex: logIndex,
+        logIndex: index,
         data: loggerData,
     });
 });
@@ -83,15 +84,16 @@ const manualLogInput = (uid, id, loggerData) => __awaiter(void 0, void 0, void 0
     });
 });
 exports.manualLogInput = manualLogInput;
-const editFavoriteSession = (uid, id, isBookmarked, loggerIndex) => __awaiter(void 0, void 0, void 0, function* () {
+const editFavoriteSession = (baseParams, isBookmarked) => __awaiter(void 0, void 0, void 0, function* () {
+    const { uid, id, index } = baseParams;
     return yield (0, action_1.write)(`
-      MATCH (:User { uid: $uid })--(:Book { id: $id })--(log:Log { index: $loggerIndex })
+      MATCH (:User { uid: $uid })--(:Book { id: $id })--(log:Log { index: $logIndex })
       WITH log
       SET log.isBookmarked = $isBookmarked
       `, {
         uid: uid,
         id: id,
-        loggerIndex: loggerIndex,
+        logIndex: index,
         isBookmarked: isBookmarked,
     });
 });

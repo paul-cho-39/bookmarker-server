@@ -1,6 +1,8 @@
 import { write } from '../../../config/action';
+import { LogBasicParams } from '../../../controllers/types/loggers';
 
-export const removeBookLog = async (uid: string, id: string, loggerIndex: number) => {
+export const removeBookLog = async (basicParams: LogBasicParams) => {
+   const { uid, id, index } = basicParams;
    return await write(
       `
        MATCH (:User { uid: $uid })--(book:Book {id: $id })-[logRel:LOGGED]-(log:Log { index: $loggerIndex})
@@ -12,7 +14,7 @@ export const removeBookLog = async (uid: string, id: string, loggerIndex: number
       {
          uid: uid,
          id: id,
-         loggerIndex: loggerIndex,
+         loggerIndex: index,
       }
    );
 };
@@ -22,6 +24,10 @@ export const removeAllLogsInBook = async (uid: string, id: string) => {
       `
        MATCH (:User { uid: $uid })--(:Book {id: $id })-[logRel:LOGGED]-(log:Log)
        DETACH DELETE log, logRel
-       `
+       `,
+      {
+         uid: uid,
+         id: id,
+      }
    );
 };

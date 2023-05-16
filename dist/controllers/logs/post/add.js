@@ -47,10 +47,9 @@ function startLog(req, res, next) {
 exports.startLog = startLog;
 function endLog(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { id, uid, logIndex } = req.params;
         const data = req.body;
         try {
-            yield (0, initiate_1.endLogging)(uid, id, logIndex, data);
+            yield (0, initiate_1.endLogging)(req.logParams, data);
             const response = (0, responseMessage_1.createCustomSuccess)('CREATED');
             res.status(response.status).json({ message: response.message });
         }

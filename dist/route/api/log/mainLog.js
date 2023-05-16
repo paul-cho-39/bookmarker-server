@@ -7,7 +7,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const logs_1 = require("./../../../controllers/logs");
 const favoriteSession_1 = require("../../../middleware/log/favoriteSession");
+const paramConverter_1 = require("../../../middleware/log/paramConverter");
 const router = express_1.default.Router();
+router.use('/:uid/:id/:logIndex', paramConverter_1.paramLogConverter);
 router.get('/:uid/:id/current-log', logs_1.getUsersCurrentlyReadingLog);
 router.post('/:uid/:id/manual-log', logs_1.addLogManually);
 // or is there a way for cleaning up old logs?

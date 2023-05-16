@@ -1,4 +1,4 @@
-import express, { Response, Request, NextFunction } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import { LoggerIndexParam } from '../../types/params';
 import { removeBookLog } from '../../../model/logs/write/remove';
 import { createCustomSuccess } from '../../../constants/responseMessage';
@@ -8,9 +8,8 @@ async function deleteSingleLog(
    res: Response,
    next: NextFunction
 ) {
-   const { id, uid, logIndex } = req.params;
    try {
-      await removeBookLog(uid, id, logIndex);
+      await removeBookLog(req.logParams);
       const response = createCustomSuccess('NO_CONTENT');
       res.status(response.status).json({ message: response.message });
    } catch (err) {

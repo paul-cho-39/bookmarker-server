@@ -2,7 +2,7 @@ import { Integer, Node } from 'neo4j-driver';
 import { UserBookParam } from './books';
 
 interface LogBasicParams extends UserBookParam {
-   logIndex?: number;
+   index?: number;
 }
 
 // logs

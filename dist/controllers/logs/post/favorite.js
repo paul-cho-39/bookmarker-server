@@ -14,11 +14,9 @@ const initiate_1 = require("../../../model/logs/write/initiate");
 const responseMessage_1 = require("../../../constants/responseMessage");
 function toggleFavoriteSession(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { uid, id, logIndex } = req.params;
         const { bookmarked } = req.body;
-        const convertedLogIndex = typeof logIndex === 'string' ? parseInt(logIndex) : logIndex;
         try {
-            yield (0, initiate_1.editFavoriteSession)(uid, id, bookmarked, convertedLogIndex);
+            yield (0, initiate_1.editFavoriteSession)(req.logParams, bookmarked);
             const response = (0, responseMessage_1.createCustomSuccess)('OK');
             res.status(response.status).json({ message: response.message });
         }

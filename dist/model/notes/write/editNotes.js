@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addPartialNoteToFavorite = exports.addNoteToFavorite = exports.editNote = void 0;
+exports.deletePartialNoteFromFavorite = exports.deleteNoteFromFavorite = exports.addPartialNoteToFavorite = exports.addNoteToFavorite = exports.editNote = void 0;
 const action_1 = require("../../../config/action");
 const editNote = (noteId, noteParams) => {
     return (0, action_1.write)(`
@@ -30,6 +30,7 @@ exports.addNoteToFavorite = addNoteToFavorite;
 // features: would like to implement this where if the user adds another users note
 // then this note is REFERENCED back to the original user
 const addPartialNoteToFavorite = (uid, noteId, noteParams) => {
+    // the logic for parsing quotes should be in controllers/helpers
     const favoriteNoteParam = Object.assign(Object.assign({}, noteParams), { uid: uid, id: noteId });
     return (0, action_1.write)(`
         MATCH (user:User { uid: $uid }), (note:Note { id: $noteId })
@@ -44,3 +45,24 @@ const addPartialNoteToFavorite = (uid, noteId, noteParams) => {
     });
 };
 exports.addPartialNoteToFavorite = addPartialNoteToFavorite;
+// TODO: save this in another file that is more fitting
+const deleteNoteFromFavorite = (uid, noteId) => {
+    return (0, action_1.write)(`
+         MATCH (u:User { uid: $uid })-[rel:FAVORITE_NOTE]-(n:Note { id: $noteId })
+         DELETE rel;
+         `, {
+        uid: uid,
+        noteId: noteId,
+    });
+};
+exports.deleteNoteFromFavorite = deleteNoteFromFavorite;
+const deletePartialNoteFromFavorite = (uid, noteId) => {
+    return (0, action_1.write)(`
+       MATCH (u:User { uid: $uid })-[rel1:FAVORITED]->(fn:FavoritedNote { userId: u.uid, noteId: $noteId })-[rel2:BASED_ON]->(n:Note)
+       DELETE rel1, rel2, fn
+       `, {
+        uid: uid,
+        noteId: noteId,
+    });
+};
+exports.deletePartialNoteFromFavorite = deletePartialNoteFromFavorite;
