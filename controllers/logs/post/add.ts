@@ -1,16 +1,16 @@
 import { Response, Request, NextFunction } from 'express';
 import { UserAndBookParam } from '../../types/params';
-import { LogType, LoggerData, ManualLoggerData } from '../../types/loggers';
+import { LogType, LoggerData, EndLoggerData } from '../../types/loggers';
 import { endLogging, manualLogInput, startLogging } from '../../../model/logs/write/initiate';
 import { createCustomSuccess } from '../../../constants/responseMessage';
 
 async function addLogManually(
-   req: Request<UserAndBookParam, {}, ManualLoggerData>,
+   req: Request<UserAndBookParam, {}, EndLoggerData>,
    res: Response,
    next: NextFunction
 ) {
    const { id, uid } = req.params;
-   const data: ManualLoggerData = req.body;
+   const data: EndLoggerData = req.body;
    console.log('data has been recieved: ', data);
    try {
       await manualLogInput(uid, id, data);
@@ -35,8 +35,8 @@ async function startLog(req: Request, res: Response, next: NextFunction) {
    }
 }
 
-async function endLog(req: Request<{}, {}, LoggerData>, res: Response, next: NextFunction) {
-   const data: LoggerData = req.body;
+async function endLog(req: Request<{}, {}, EndLoggerData>, res: Response, next: NextFunction) {
+   const data: EndLoggerData = req.body;
    try {
       await endLogging(req.logParams, data);
       const response = createCustomSuccess('CREATED');

@@ -19,7 +19,7 @@ interface LoggerData extends LogProperties {
    location?: string;
 }
 
-interface ManualLoggerData extends LoggerData {
+interface EndLoggerData extends LoggerData {
    startTime: Date;
    endTime: Date;
 }
@@ -49,4 +49,4 @@ type NoteRelParam<T> = T extends NoteProps
    : NoteRelParamWithoutNoteProps;
 
 export type LogType = { log: Node<Integer, LogProperties> };
-export type { LoggerData, ManualLoggerData, LogBasicParams, NoteProps, NoteRelParam };
+export type { LoggerData, EndLoggerData, LogBasicParams, NoteProps, NoteRelParam };

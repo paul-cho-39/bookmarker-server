@@ -1,5 +1,5 @@
 import { write } from '../../../config/action';
-import { LogBasicParams, LoggerData, ManualLoggerData } from '../../../controllers/types/loggers';
+import { EndLoggerData, LogBasicParams, LoggerData } from '../../../controllers/types/loggers';
 
 // do not think there will be start logging and end logging
 // if the nfc can be scanned without the app and recieve the input for new Date();
@@ -15,7 +15,7 @@ export const startLogging = async (uid: string, id: string, startDate: string) =
         with book
         OPTIONAL MATCH (book)--(log:Log)
         WITH COALESCE(MAX(log.index), 0) as totalIndex, book
-        CREATE (newLog:Log { index: totalIndex })-[:LOGGED {startDate: $startDate, complete: false }]->(book)
+        CREATE (newLog:Log { index: totalIndex, startDate: $startDate })-[:LOGGED {complete: false }]->(book)
         WITH newLog
         CALL apoc.atomic.add(newLog, 'index', 1)
         YIELD newValue
@@ -29,7 +29,7 @@ export const startLogging = async (uid: string, id: string, startDate: string) =
    );
 };
 
-export const endLogging = async (baseParams: LogBasicParams, loggerData: LoggerData) => {
+export const endLogging = async (baseParams: LogBasicParams, loggerData: EndLoggerData) => {
    const { uid, id, index } = baseParams;
    return await write(
       `
@@ -37,7 +37,6 @@ export const endLogging = async (baseParams: LogBasicParams, loggerData: LoggerD
         WITH book, rel, log
         MERGE (book)-[rel]-(log)
             ON MATCH SET 
-                rel.endDate: $date,
                 rel.complete = true,
                 log = $data
         `,
@@ -50,15 +49,16 @@ export const endLogging = async (baseParams: LogBasicParams, loggerData: LoggerD
    );
 };
 
-export const manualLogInput = async (uid: string, id: string, loggerData: ManualLoggerData) => {
-   const { startTime, endTime, ...data } = loggerData;
+// TODO: HAVE TO TEST THIS OUT
+export const manualLogInput = async (uid: string, id: string, loggerData: EndLoggerData) => {
+   const { ...data } = loggerData;
    return await write(
       `
       MATCH (u:User { uid: $uid })--(book:Book { id: $id })
         WITH book
         OPTIONAL MATCH (book)-[:LOGGED]-(log:Log)
         WITH COALESCE(MAX(log.index), 0) as totalIndex, book
-        CREATE (newLog:Log { index: totalIndex, property: $data })-[:LOGGED { startDate: $startTime, endDate: $endTime, complete: true }]->(book)
+        CREATE (newLog:Log { index: totalIndex, property: $data })-[:LOGGED { complete: true }]->(book)
         WITH newLog
         CALL apoc.atomic.add(newLog, 'index', 1)
         YIELD newValue
@@ -67,8 +67,6 @@ export const manualLogInput = async (uid: string, id: string, loggerData: Manual
       {
          uid: uid,
          id: id,
-         startTime: startTime,
-         endTime: endTime,
          data: data,
       }
    );

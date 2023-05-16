@@ -10,14 +10,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPastLogs = exports.getCurrentLog = exports.getBookLogs = void 0;
+exports.getPastLogs = exports.getCurrentLog = exports.getLogsByBook = void 0;
 const action_1 = require("../../../config/action");
 // for this to work it will be the same implementation -- it will add
-const getBookLogs = (uid, id) => __awaiter(void 0, void 0, void 0, function* () {
+// TODO: get all the logs from users
+const getLogsByBook = (uid, id, quantity) => __awaiter(void 0, void 0, void 0, function* () {
     return yield (0, action_1.read)(`
+      MATCH (:User { uid: $uid })--(:Book { id: $id })--(log:Log)
+
       `);
 });
-exports.getBookLogs = getBookLogs;
+exports.getLogsByBook = getLogsByBook;
 // think of how the data will come back as(?);
 // TODO: write typescript
 const getCurrentLog = (uid, id) => __awaiter(void 0, void 0, void 0, function* () {

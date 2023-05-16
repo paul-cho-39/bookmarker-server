@@ -33,7 +33,7 @@ const startLogging = (uid, id, startDate) => __awaiter(void 0, void 0, void 0, f
         with book
         OPTIONAL MATCH (book)--(log:Log)
         WITH COALESCE(MAX(log.index), 0) as totalIndex, book
-        CREATE (newLog:Log { index: totalIndex })-[:LOGGED {startDate: $startDate, complete: false }]->(book)
+        CREATE (newLog:Log { index: totalIndex, startDate: $startDate })-[:LOGGED {complete: false }]->(book)
         WITH newLog
         CALL apoc.atomic.add(newLog, 'index', 1)
         YIELD newValue
@@ -52,7 +52,6 @@ const endLogging = (baseParams, loggerData) => __awaiter(void 0, void 0, void 0,
         WITH book, rel, log
         MERGE (book)-[rel]-(log)
             ON MATCH SET 
-                rel.endDate: $date,
                 rel.complete = true,
                 log = $data
         `, {
@@ -63,14 +62,15 @@ const endLogging = (baseParams, loggerData) => __awaiter(void 0, void 0, void 0,
     });
 });
 exports.endLogging = endLogging;
+// TODO: HAVE TO TEST THIS OUT
 const manualLogInput = (uid, id, loggerData) => __awaiter(void 0, void 0, void 0, function* () {
-    const { startTime, endTime } = loggerData, data = __rest(loggerData, ["startTime", "endTime"]);
+    const data = __rest(loggerData, []);
     return yield (0, action_1.write)(`
       MATCH (u:User { uid: $uid })--(book:Book { id: $id })
         WITH book
         OPTIONAL MATCH (book)-[:LOGGED]-(log:Log)
         WITH COALESCE(MAX(log.index), 0) as totalIndex, book
-        CREATE (newLog:Log { index: totalIndex, property: $data })-[:LOGGED { startDate: $startTime, endDate: $endTime, complete: true }]->(book)
+        CREATE (newLog:Log { index: totalIndex, property: $data })-[:LOGGED { complete: true }]->(book)
         WITH newLog
         CALL apoc.atomic.add(newLog, 'index', 1)
         YIELD newValue
@@ -78,8 +78,6 @@ const manualLogInput = (uid, id, loggerData) => __awaiter(void 0, void 0, void 0
       `, {
         uid: uid,
         id: id,
-        startTime: startTime,
-        endTime: endTime,
         data: data,
     });
 });

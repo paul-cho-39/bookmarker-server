@@ -3,9 +3,12 @@
 import { read } from '../../../config/action';
 
 // for this to work it will be the same implementation -- it will add
-export const getBookLogs = async (uid: string, id: string) => {
+// TODO: get all the logs from users
+export const getLogsByBook = async (uid: string, id: string, quantity: number) => {
    return await read(
       `
+      MATCH (:User { uid: $uid })--(:Book { id: $id })--(log:Log)
+
       `
    );
 };

@@ -11,6 +11,7 @@ declare global {
          googleData: Items<Record<string, string>>;
          filteredBookData: BookData;
          logParams: UserBookParam & { index: number };
+         neo4jDates: Record<string, string>;
       }
    }
 }
