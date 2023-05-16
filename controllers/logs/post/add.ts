@@ -22,10 +22,11 @@ async function addLogManually(
 }
 
 async function startLog(req: Request, res: Response, next: NextFunction) {
-   const { id, uid } = req.params;
-   const { startTime } = req.body as { startTime: string };
+   // const { startTime } = req.body as { startTime: string };
    try {
-      const result = (await startLogging(uid, id, startTime)) as LogType[];
+      const { id, uid } = req.params;
+      console.log('is it processing correctly?', req.neo4jDates.startTime);
+      const result = await startLogging(uid, id, req.neo4jDates.startTime);
       const properties = result[0].log.properties;
       const response = createCustomSuccess('OK');
       console.log('log finished', response);

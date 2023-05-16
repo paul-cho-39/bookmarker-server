@@ -30,10 +30,11 @@ function addLogManually(req, res, next) {
 exports.addLogManually = addLogManually;
 function startLog(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { id, uid } = req.params;
-        const { startTime } = req.body;
+        // const { startTime } = req.body as { startTime: string };
         try {
-            const result = (yield (0, initiate_1.startLogging)(uid, id, startTime));
+            const { id, uid } = req.params;
+            console.log('is it processing correctly?', req.neo4jDates.startTime);
+            const result = yield (0, initiate_1.startLogging)(uid, id, req.neo4jDates.startTime);
             const properties = result[0].log.properties;
             const response = (0, responseMessage_1.createCustomSuccess)('OK');
             console.log('log finished', response);

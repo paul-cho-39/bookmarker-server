@@ -4,12 +4,20 @@ import { read } from '../../../config/action';
 
 // for this to work it will be the same implementation -- it will add
 // TODO: get all the logs from users
-export const getLogsByBook = async (uid: string, id: string, quantity: number) => {
+export const getLogsByBook = async (uid: string, id: string, quantity: number = 10) => {
    return await read(
       `
-      MATCH (:User { uid: $uid })--(:Book { id: $id })--(log:Log)
-
-      `
+      MATCH (:User { uid: $uid })--(book:Book { id: $id })--(log:Log)
+      ORDER BY log.startTime DESC
+      LIMIT $quantity
+      WITH book.title as title, log
+      RETURN log, title
+      `,
+      {
+         uid: uid,
+         id: id,
+         quantity: quantity,
+      }
    );
 };
 
@@ -36,6 +44,7 @@ export const getPastLogs = async (uid: string, count: number = 10) => {
    return await read(
       `
       MATCH (:User { $uid })--()--(log:Log)
+      ORDER BY log.startTime 
       `
    );
 };

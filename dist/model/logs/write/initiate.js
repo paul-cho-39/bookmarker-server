@@ -30,10 +30,10 @@ const action_1 = require("../../../config/action");
 const startLogging = (uid, id, startDate) => __awaiter(void 0, void 0, void 0, function* () {
     return yield (0, action_1.write)(`
         MATCH (u:User { uid: $uid })--(book:Book { id: $id })
-        with book
+        WITH book
         OPTIONAL MATCH (book)--(log:Log)
         WITH COALESCE(MAX(log.index), 0) as totalIndex, book
-        CREATE (newLog:Log { index: totalIndex, startDate: $startDate })-[:LOGGED {complete: false }]->(book)
+        CREATE (newLog:Log { index: totalIndex, startDate: datetime($startDate) })-[:LOGGED {complete: false }]->(book)
         WITH newLog
         CALL apoc.atomic.add(newLog, 'index', 1)
         YIELD newValue
@@ -47,18 +47,21 @@ const startLogging = (uid, id, startDate) => __awaiter(void 0, void 0, void 0, f
 exports.startLogging = startLogging;
 const endLogging = (baseParams, loggerData) => __awaiter(void 0, void 0, void 0, function* () {
     const { uid, id, index } = baseParams;
+    const { startTime, endTime } = loggerData, data = __rest(loggerData, ["startTime", "endTime"]);
     return yield (0, action_1.write)(`
         MATCH (:User { uid: $uid })--(book:Book { id: $id })-[rel:LOGGED]-(log:Log { index: $logIndex })
         WITH book, rel, log
         MERGE (book)-[rel]-(log)
             ON MATCH SET 
                 rel.complete = true,
+                log.startDate = datetime($startTime)
+                log.endDate = datetime($endTime)
                 log = $data
         `, {
         uid: uid,
         id: id,
         logIndex: index,
-        data: loggerData,
+        data: data,
     });
 });
 exports.endLogging = endLogging;

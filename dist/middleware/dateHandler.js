@@ -15,6 +15,7 @@ function processDates(req, _res, next) {
         // all request with dates should be coming with dates objects
         if (req.body.dates) {
             const dateObj = req.body.dates;
+            console.log('the date obj is: ', dateObj);
             req.neo4jDates = Object.entries(dateObj).reduce((acc, [key, value]) => {
                 const date = new Date(value);
                 const neo4jDate = date.toISOString().split('T')[0];

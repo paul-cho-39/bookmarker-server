@@ -14,11 +14,18 @@ exports.getPastLogs = exports.getCurrentLog = exports.getLogsByBook = void 0;
 const action_1 = require("../../../config/action");
 // for this to work it will be the same implementation -- it will add
 // TODO: get all the logs from users
-const getLogsByBook = (uid, id, quantity) => __awaiter(void 0, void 0, void 0, function* () {
+const getLogsByBook = (uid, id, quantity = 10) => __awaiter(void 0, void 0, void 0, function* () {
     return yield (0, action_1.read)(`
-      MATCH (:User { uid: $uid })--(:Book { id: $id })--(log:Log)
-
-      `);
+      MATCH (:User { uid: $uid })--(book:Book { id: $id })--(log:Log)
+      ORDER BY log.startTime DESC
+      LIMIT $quantity
+      WITH book.title as title, log
+      RETURN log, title
+      `, {
+        uid: uid,
+        id: id,
+        quantity: quantity,
+    });
 });
 exports.getLogsByBook = getLogsByBook;
 // think of how the data will come back as(?);
@@ -40,6 +47,7 @@ exports.getCurrentLog = getCurrentLog;
 const getPastLogs = (uid, count = 10) => __awaiter(void 0, void 0, void 0, function* () {
     return yield (0, action_1.read)(`
       MATCH (:User { $uid })--()--(log:Log)
+      ORDER BY log.startTime 
       `);
 });
 exports.getPastLogs = getPastLogs;

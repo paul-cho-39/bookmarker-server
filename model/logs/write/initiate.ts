@@ -12,10 +12,10 @@ export const startLogging = async (uid: string, id: string, startDate: string) =
    return await write(
       `
         MATCH (u:User { uid: $uid })--(book:Book { id: $id })
-        with book
+        WITH book
         OPTIONAL MATCH (book)--(log:Log)
         WITH COALESCE(MAX(log.index), 0) as totalIndex, book
-        CREATE (newLog:Log { index: totalIndex, startDate: $startDate })-[:LOGGED {complete: false }]->(book)
+        CREATE (newLog:Log { index: totalIndex, startDate: datetime($startDate) })-[:LOGGED {complete: false }]->(book)
         WITH newLog
         CALL apoc.atomic.add(newLog, 'index', 1)
         YIELD newValue
@@ -31,6 +31,7 @@ export const startLogging = async (uid: string, id: string, startDate: string) =
 
 export const endLogging = async (baseParams: LogBasicParams, loggerData: EndLoggerData) => {
    const { uid, id, index } = baseParams;
+   const { startTime, endTime, ...data } = loggerData;
    return await write(
       `
         MATCH (:User { uid: $uid })--(book:Book { id: $id })-[rel:LOGGED]-(log:Log { index: $logIndex })
@@ -38,13 +39,16 @@ export const endLogging = async (baseParams: LogBasicParams, loggerData: EndLogg
         MERGE (book)-[rel]-(log)
             ON MATCH SET 
                 rel.complete = true,
+                log.startDate = datetime($startTime)
+                log.endDate = datetime($endTime)
                 log = $data
         `,
       {
          uid: uid,
          id: id,
          logIndex: index,
-         data: loggerData,
+
+         data: data,
       }
    );
 };

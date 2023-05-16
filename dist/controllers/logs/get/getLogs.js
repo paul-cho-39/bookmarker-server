@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsersCurrentlyReadingLog = void 0;
+exports.getUsersLogByBook = exports.getUsersCurrentlyReadingLog = void 0;
 const getLogger_1 = require("../../../model/logs/read/getLogger");
 const responseMessage_1 = require("../../../constants/responseMessage");
 function getUsersCurrentlyReadingLog(req, res, next) {
@@ -32,3 +32,16 @@ function getUsersCurrentlyReadingLog(req, res, next) {
     });
 }
 exports.getUsersCurrentlyReadingLog = getUsersCurrentlyReadingLog;
+function getUsersLogByBook(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { uid, id } = req.params;
+        try {
+            const logNode = yield (0, getLogger_1.getLogsByBook)(uid, id, 10);
+            console.log('getting log nodes...', logNode);
+        }
+        catch (err) {
+            next(err);
+        }
+    });
+}
+exports.getUsersLogByBook = getUsersLogByBook;
