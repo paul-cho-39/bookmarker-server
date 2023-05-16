@@ -33,7 +33,6 @@ function startLog(req, res, next) {
         // const { startTime } = req.body as { startTime: string };
         try {
             const { id, uid } = req.params;
-            console.log('is it processing correctly?', req.neo4jDates.startTime);
             const result = yield (0, initiate_1.startLogging)(uid, id, req.neo4jDates.startTime);
             const properties = result[0].log.properties;
             const response = (0, responseMessage_1.createCustomSuccess)('OK');

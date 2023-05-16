@@ -25,7 +25,6 @@ async function startLog(req: Request, res: Response, next: NextFunction) {
    // const { startTime } = req.body as { startTime: string };
    try {
       const { id, uid } = req.params;
-      console.log('is it processing correctly?', req.neo4jDates.startTime);
       const result = await startLogging(uid, id, req.neo4jDates.startTime);
       const properties = result[0].log.properties;
       const response = createCustomSuccess('OK');
@@ -36,7 +35,7 @@ async function startLog(req: Request, res: Response, next: NextFunction) {
    }
 }
 
-async function endLog(req: Request<{}, {}, EndLoggerData>, res: Response, next: NextFunction) {
+async function endLog(req: Request, res: Response, next: NextFunction) {
    const data: EndLoggerData = req.body;
    try {
       await endLogging(req.logParams, data);

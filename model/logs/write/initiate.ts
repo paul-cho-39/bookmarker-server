@@ -31,7 +31,7 @@ export const startLogging = async (uid: string, id: string, startDate: string) =
 
 export const endLogging = async (baseParams: LogBasicParams, loggerData: EndLoggerData) => {
    const { uid, id, index } = baseParams;
-   const { startTime, endTime, ...data } = loggerData;
+   const { dates, ...data } = loggerData;
    return await write(
       `
         MATCH (:User { uid: $uid })--(book:Book { id: $id })-[rel:LOGGED]-(log:Log { index: $logIndex })
@@ -39,7 +39,6 @@ export const endLogging = async (baseParams: LogBasicParams, loggerData: EndLogg
         MERGE (book)-[rel]-(log)
             ON MATCH SET 
                 rel.complete = true,
-                log.startDate = datetime($startTime)
                 log.endDate = datetime($endTime)
                 log = $data
         `,
@@ -47,8 +46,8 @@ export const endLogging = async (baseParams: LogBasicParams, loggerData: EndLogg
          uid: uid,
          id: id,
          logIndex: index,
-
-         data: data,
+         endTime: dates.endTime,
+         data: data.meta,
       }
    );
 };

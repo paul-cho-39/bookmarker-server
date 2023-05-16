@@ -7,28 +7,30 @@ interface LogBasicParams extends UserBookParam {
 
 // logs
 interface LogProperties {
-   // add more here
    index: number;
-   bookmarked?: boolean;
 }
 
-interface LoggerData extends LogProperties {
-   feedback?: 0 | 1;
-   pageCount?: number;
-   comment?: string;
-   location?: string;
+interface LoggerData {
+   meta: {
+      feedback?: 0 | 1;
+      pageCount?: number;
+      location?: string;
+      bookmarked?: boolean;
+   };
 }
 
 interface EndLoggerData extends LoggerData {
-   startTime: Date;
-   endTime: Date;
+   dates: {
+      startTime: Date;
+      endTime: Date;
+   };
 }
 
 // notes
 interface NoteProps {
-   id: string;
-   title?: string;
-   body: string;
+   // id is provided using apoc
+   bigIdea?: string;
+   notes: string;
    logIndex?: number;
    quote?: string[]; // multiple quotes in a single note
    reference?: string | number; // page or url

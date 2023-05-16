@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 interface CustomRequest extends Request {
    body: {
       dates?: Record<string, string>;
-   };
+   } & Record<any, any>;
 }
 
 export async function processDates(req: CustomRequest, _res: Response, next: NextFunction) {

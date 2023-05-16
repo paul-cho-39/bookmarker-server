@@ -47,21 +47,21 @@ const startLogging = (uid, id, startDate) => __awaiter(void 0, void 0, void 0, f
 exports.startLogging = startLogging;
 const endLogging = (baseParams, loggerData) => __awaiter(void 0, void 0, void 0, function* () {
     const { uid, id, index } = baseParams;
-    const { startTime, endTime } = loggerData, data = __rest(loggerData, ["startTime", "endTime"]);
+    const { dates } = loggerData, data = __rest(loggerData, ["dates"]);
     return yield (0, action_1.write)(`
         MATCH (:User { uid: $uid })--(book:Book { id: $id })-[rel:LOGGED]-(log:Log { index: $logIndex })
         WITH book, rel, log
         MERGE (book)-[rel]-(log)
             ON MATCH SET 
                 rel.complete = true,
-                log.startDate = datetime($startTime)
                 log.endDate = datetime($endTime)
                 log = $data
         `, {
         uid: uid,
         id: id,
         logIndex: index,
-        data: data,
+        endTime: dates.endTime,
+        data: data.meta,
     });
 });
 exports.endLogging = endLogging;
