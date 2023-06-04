@@ -21,11 +21,17 @@ function bookHandler(req, res, next, bookAction, relType) {
         const googleData = req.googleData;
         const data = (0, bookData_1.default)(googleData);
         const bookWrite = new bookWrite_1.default(uid, id, data);
-        console.log('handling the books and processing...');
+        const readingProps = req.body.isRereading ? 'FINISHED:CURRENTLY_READING' : relType;
+        const onPage = parseInt(req.body.currentPage) || 0;
         try {
             switch (bookAction) {
                 case 'edit':
-                    yield bookWrite.editBook(relType);
+                    yield bookWrite.editBook(readingProps);
+                    yield bookWrite.updatePageRead(onPage);
+                    break;
+                case 'editPage':
+                    yield bookWrite.editBook(readingProps);
+                    yield bookWrite.updatePageRead(onPage);
                     break;
                 case 'finished':
                     yield bookWrite.getFinishedDates();
@@ -35,6 +41,7 @@ function bookHandler(req, res, next, bookAction, relType) {
             }
             yield Promise.all([bookWrite.createAuthors(), bookWrite.createCategories()]);
             const customSuccess = (0, responseMessage_1.createCustomSuccess)('CREATED');
+            console.log(customSuccess.message, 'editing books');
             res.status(customSuccess.status).json({
                 status: customSuccess.status,
                 message: customSuccess.message,

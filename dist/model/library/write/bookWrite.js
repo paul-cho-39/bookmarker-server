@@ -31,24 +31,26 @@ class BookWrite {
         this.id = id;
     }
     //  have this and execute with id in another class?
-    _executeQuery(cypher, params) {
+    mergeParams(params) {
         var _a;
+        const id = (_a = this.data) === null || _a === void 0 ? void 0 : _a.data.id;
+        return Object.assign(Object.assign({}, params), { uid: this.uid, id: !id ? this.id : id });
+    }
+    _executeQueryWithUid(cypher, params) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = (_a = this.data) === null || _a === void 0 ? void 0 : _a.data.id;
-            return (0, action_1.write)(cypher, Object.assign(Object.assign({}, params), { uid: this.uid, id: !id ? this.id : id }));
+            return (0, action_1.write)(cypher, this.mergeParams(params));
         });
     }
     _executeQueryWithoutUid(cypher, params) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            const id = (_a = this.data) === null || _a === void 0 ? void 0 : _a.data.id;
-            return (0, action_1.write)(cypher, Object.assign(Object.assign({}, params), { id: !id ? this.id : id }));
+            const _a = this.mergeParams(params), { uid } = _a, mergedParams = __rest(_a, ["uid"]);
+            return (0, action_1.write)(cypher, mergedParams);
         });
     }
     editBook(relType) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            yield this._executeQuery(`
+            yield this._executeQueryWithUid(`
       MATCH (u:User { uid: $uid })
       OPTIONAL MATCH (b:Book { id: $id })
       WITH u, b
@@ -82,7 +84,7 @@ class BookWrite {
     }
     initiatePrimaryBookSelection() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this._executeQuery(`
+            yield this._executeQueryWithUid(`
       MATCH (user:User { uid: $uid })-[rel:CURRENTLY_READING]-(b:Book {id: $id })
       CALL apoc.refactor.setType(rel,"CURRENTLY_READING:PRIMARY") yield input, output
       RETURN input, output
@@ -91,7 +93,7 @@ class BookWrite {
     }
     changePrimaryBook() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this._executeQuery(`
+            yield this._executeQueryWithUid(`
       MATCH (user:User { uid: $uid })-[rel:CURRENTLY_READING]-(b:Book {id: $id })
       OPTIONAL MATCH (user)-[rel2]-(primary:Book) WHERE type(rel2) = "CURRENTLY_READING:PRIMARY"
       WITH rel2, rel
@@ -104,16 +106,26 @@ class BookWrite {
     }
     deleteBook() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this._executeQuery(`
+            yield this._executeQueryWithUid(`
       MATCH (user:User { uid: $uid })--(book:Book { id: $id })
       DETACH DELETE book
       `, {});
         });
     }
+    updatePageRead(page) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._executeQueryWithUid(`
+         MATCH (u:User { uid: $uid })-[rel]-(book:Book { id: $id })
+         SET rel.onPage = $pageRead
+         `, {
+                pageRead: page,
+            });
+        });
+    }
     getFinishedDates() {
         return __awaiter(this, void 0, void 0, function* () {
             const _a = this.data, { year, month, day } = _a, props = __rest(_a, ["year", "month", "day"]);
-            yield this._executeQuery(`
+            yield this._executeQueryWithUid(`
       MATCH (u:User { uid: $uid})
       MERGE (u)-[rel:FINISHED]-(b:Book { id: $id })
          ON MATCH SET 

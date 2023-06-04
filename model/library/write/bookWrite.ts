@@ -20,18 +20,22 @@ export default class BookWrite {
    }
 
    //  have this and execute with id in another class?
-   private async _executeQuery(cypher: string, params: Record<string, any>) {
+   private mergeParams(params: Record<string, any>) {
       const id = this.data?.data.id;
-      return write(cypher, { ...params, uid: this.uid, id: !id ? this.id : id });
+      return { ...params, uid: this.uid, id: !id ? this.id : id };
+   }
+
+   private async _executeQueryWithUid(cypher: string, params: Record<string, any>) {
+      return write(cypher, this.mergeParams(params));
    }
 
    private async _executeQueryWithoutUid(cypher: string, params: Record<string, any>) {
-      const id = this.data?.data.id;
-      return write(cypher, { ...params, id: !id ? this.id : id });
+      const { uid, ...mergedParams } = this.mergeParams(params);
+      return write(cypher, mergedParams);
    }
 
    public async editBook(relType: BookRelationTypes) {
-      await this._executeQuery(
+      await this._executeQueryWithUid(
          `
       MATCH (u:User { uid: $uid })
       OPTIONAL MATCH (b:Book { id: $id })
@@ -67,7 +71,7 @@ export default class BookWrite {
    }
 
    public async initiatePrimaryBookSelection() {
-      await this._executeQuery(
+      await this._executeQueryWithUid(
          `
       MATCH (user:User { uid: $uid })-[rel:CURRENTLY_READING]-(b:Book {id: $id })
       CALL apoc.refactor.setType(rel,"CURRENTLY_READING:PRIMARY") yield input, output
@@ -78,7 +82,7 @@ export default class BookWrite {
    }
 
    public async changePrimaryBook() {
-      await this._executeQuery(
+      await this._executeQueryWithUid(
          `
       MATCH (user:User { uid: $uid })-[rel:CURRENTLY_READING]-(b:Book {id: $id })
       OPTIONAL MATCH (user)-[rel2]-(primary:Book) WHERE type(rel2) = "CURRENTLY_READING:PRIMARY"
@@ -93,7 +97,7 @@ export default class BookWrite {
    }
 
    public async deleteBook() {
-      await this._executeQuery(
+      await this._executeQueryWithUid(
          `
       MATCH (user:User { uid: $uid })--(book:Book { id: $id })
       DETACH DELETE book
@@ -102,9 +106,21 @@ export default class BookWrite {
       );
    }
 
+   public async updatePageRead(page: number) {
+      await this._executeQueryWithUid(
+         `
+         MATCH (u:User { uid: $uid })-[rel]-(book:Book { id: $id })
+         SET rel.onPage = $pageRead
+         `,
+         {
+            pageRead: page,
+         }
+      );
+   }
+
    public async getFinishedDates() {
       const { year, month, day, ...props } = this.data as FinishedBookUpdateProps;
-      await this._executeQuery(
+      await this._executeQueryWithUid(
          `
       MATCH (u:User { uid: $uid})
       MERGE (u)-[rel:FINISHED]-(b:Book { id: $id })

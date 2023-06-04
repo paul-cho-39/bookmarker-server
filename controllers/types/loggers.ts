@@ -13,6 +13,7 @@ interface LogProperties {
 interface LoggerData {
    meta: {
       feedback?: 0 | 1;
+      rating?: number;
       pageCount?: number;
       location?: string;
       bookmarked?: boolean;
@@ -27,11 +28,13 @@ interface EndLoggerData extends LoggerData {
 }
 
 // notes
+// TODO: for any arrays have to use UNWIND
 interface NoteProps {
    // id is provided using apoc
    bigIdea?: string;
    notes: string;
    logIndex?: number;
+   tags: string[];
    quote?: string[]; // multiple quotes in a single note
    reference?: string | number; // page or url
 }

@@ -18,21 +18,18 @@ const router = express_1.default.Router();
 router.use(['/:uid/:id/reading', '/:uid/:id/finished/rereading'], library_1.selectPrimary);
 const routes = [
     { url: '/:uid/:id/reading', props: 'CURRENTLY_READING', action: 'edit' },
+    { url: '/:uid/:id/reading/include-page', props: 'CURRENTLY_READING', action: 'editPage' },
     { url: '/:uid/:id/want', props: 'WANT_TO_READ', action: 'edit' },
     { url: '/:uid/:id/finished', props: 'FINISHED', action: 'edit' },
-    { url: '/:uid/:id/finished/rereading', props: 'FINISHED:CURRENTLY_READING', action: 'edit' },
     { url: '/:uid/:id/finished/dates', props: null, action: 'finished' },
     { url: '/:uid/:id/remove', props: null, action: 'remove' },
 ];
+// remove here will use POST verb
 routes.forEach((route) => {
     const { url, props, action } = route;
-    const isRemove = route.action === 'remove';
-    isRemove
-        ? router.delete(url, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-            yield (0, library_1.bookHandler)(req, res, next, action, props);
-        }))
-        : router.post(url, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-            yield (0, library_1.bookHandler)(req, res, next, action, props);
-        }));
+    const requestHandler = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        yield (0, library_1.bookHandler)(req, res, next, action, props);
+    });
+    router.post(url, requestHandler);
 });
 exports.default = router;

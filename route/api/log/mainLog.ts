@@ -26,7 +26,7 @@ router.post('/:uid/:id/start', processDates, startLog);
 
 // do not increase the logIndex(?) if the startTime has not passed 12 hours mark
 // if the 12 hour comes from the setting along with the body then it is the settings mark
-router.post('/:uid/:id/:logIndex/end', endLog);
+router.post('/:uid/:id/:logIndex/end', processDates, endLog);
 router.post(`/:uid/:id/:logIndex/favorite-session`, checkBookmarkedValue, toggleFavoriteSession);
 router.delete('/:uid/:id/:logIndex/delete', deleteSingleLog);
 

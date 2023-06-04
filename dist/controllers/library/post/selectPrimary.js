@@ -20,7 +20,7 @@ function selectPrimary(req, _res, next) {
         const { uid } = req.params;
         const { currentlyReading } = req.body;
         console.log('The users currently reading library:', currentlyReading);
-        if (currentlyReading.length <= 1) {
+        if (currentlyReading && currentlyReading.length <= 1) {
             let id = currentlyReading[0];
             const bookWrite = new bookWrite_1.default(uid, id);
             yield bookWrite.initiatePrimaryBookSelection();

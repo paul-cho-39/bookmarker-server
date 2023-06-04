@@ -16,11 +16,18 @@ export default async function bookHandler(
    const data = filterBookData(googleData);
 
    const bookWrite = new BookWrite(uid, id, data);
-   console.log('handling the books and processing...');
+   const readingProps = req.body.isRereading ? 'FINISHED:CURRENTLY_READING' : relType;
+   const onPage = parseInt(req.body.currentPage) || 0;
+
    try {
       switch (bookAction) {
          case 'edit':
-            await bookWrite.editBook(relType as BookRelationTypes);
+            await bookWrite.editBook(readingProps as BookRelationTypes);
+            await bookWrite.updatePageRead(onPage);
+            break;
+         case 'editPage':
+            await bookWrite.editBook(readingProps as BookRelationTypes);
+            await bookWrite.updatePageRead(onPage);
             break;
          case 'finished':
             await bookWrite.getFinishedDates();
@@ -31,6 +38,7 @@ export default async function bookHandler(
 
       await Promise.all([bookWrite.createAuthors(), bookWrite.createCategories()]);
       const customSuccess = createCustomSuccess('CREATED');
+      console.log(customSuccess.message, 'editing books');
 
       res.status(customSuccess.status).json({
          status: customSuccess.status,

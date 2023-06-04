@@ -64,7 +64,7 @@ export type BookRelationTypes =
    | 'FINISHED'
    | 'FINISHED:REREADING';
 
-export type BookAction = 'edit' | 'finished' | 'remove';
+export type BookAction = 'edit' | 'finished' | 'remove' | 'editPage';
 
 export interface BookSection {
    parts?: number | string;
